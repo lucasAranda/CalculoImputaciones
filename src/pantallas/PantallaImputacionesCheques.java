@@ -8,10 +8,12 @@ package pantallas;
 import comun.ConversorStringDate;
 import comun.InicializarCombo;
 import comun.MostrarMensaje;
+import comun.Redondear;
 import controlador.ExpertoCrearExcel;
 import controlador.ExpertoImputacion;
 import dto.DtoImputacionCheque;
 import dto.DtoImputacionMovimiento;
+import dto.DtoResultadoConsulta;
 import dto.DtoVendedor;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
     private Calendar calendar;
     private ExpertoImputacion expertoImputacion;
     private ExpertoCrearExcel expertoCrearExcel;
-    List<DtoImputacionCheque> imputaciones = new ArrayList<>();
+    private DtoResultadoConsulta consulta;
+    //List<DtoImputacionCheque> imputaciones = new ArrayList<>();
     List<DtoVendedor> vendedores = new ArrayList<>();
 
     /**
@@ -44,7 +47,8 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         expertoImputacion = new ExpertoImputacion();
         expertoCrearExcel = new ExpertoCrearExcel();
-        mostrarBasesDatos();
+        //mostrarBasesDatos(); SE ELIMINO EL COMBO!
+        mostrarVendedores();
         this.calendar = Calendar.getInstance();
         crearAnioDesde(calendar.get(Calendar.YEAR));
         crearAnioHasta(calendar.get(Calendar.YEAR));
@@ -64,8 +68,6 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        comboBase = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         comboDiaDesde = new javax.swing.JComboBox();
@@ -85,17 +87,10 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
         tablaImputaciones = new javax.swing.JTable();
         excel = new javax.swing.JButton();
         consultarCheques = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jLabel1.setText("Empresa:");
-
-        comboBase.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        comboBase.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBaseActionPerformed(evt);
-            }
-        });
 
         jLabel2.setText("Fechas de coonsulta:");
 
@@ -148,13 +143,13 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
 
         tablaImputaciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Cliente", "Vendedor", "Recibo N°", "Fecha Recibo", "Importe Recibo", "Factura N°", "Fecha Emis Fact", "Importe Factura", "Cheque N°", "Importe Cheque", "Fecha Emis Chq", "Fecha Cob Chq", "Dif Fac Rec", "Dif Fac Chq"
+                "Empresa", "Cliente", "Vendedor", "Recibo N°", "Fecha Recibo", "Importe Recibo", "Factura N°", "Fecha Emis Fact", "Importe Factura", "Cheque N°", "Importe Cheque", "Fecha Emis Chq", "Fecha Cob Chq", "Dif Fac Rec", "Dif Fac Chq"
             }
         ));
         jScrollPane1.setViewportView(tablaImputaciones);
@@ -173,6 +168,10 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setText("Importe Total:");
+
+        jLabel11.setText("..");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -183,15 +182,9 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
                     .addComponent(excel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(comboBase, 0, 263, Short.MAX_VALUE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(comboVendedores, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(consultarCheques, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(consultarCheques, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(comboVendedores, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
@@ -220,21 +213,23 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel8)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(comboAnioHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1055, Short.MAX_VALUE))
-                .addGap(15, 15, 15))
+                                        .addComponent(comboAnioHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1060, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(comboBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(comboDiaDesde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
@@ -252,7 +247,11 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
                     .addComponent(comboAnioHasta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(consultarCheques))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 464, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(excel)
                 .addContainerGap())
@@ -282,24 +281,19 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
         crearDiaHasta(calendar.get(Calendar.DATE), comboMesDesde.getSelectedIndex());
     }//GEN-LAST:event_comboMesHastaActionPerformed
 
-    private void comboBaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBaseActionPerformed
-        // TODO add your handling code here:
-        cargarVendedores(comboBase.getSelectedItem().toString());
-    }//GEN-LAST:event_comboBaseActionPerformed
-
     private void comboVendedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboVendedoresActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_comboVendedoresActionPerformed
 
     private void excelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_excelActionPerformed
-        if (!imputaciones.isEmpty()) {
+        if (!consulta.getImputacionesCheque().isEmpty()) {
             try {
                 String fechaDesde, fechaHasta, desde, hasta;
                 fechaDesde = comboAnioDesde.getSelectedItem().toString() + "-" + comboMesDesde.getSelectedItem().toString() + "-" + comboDiaDesde.getSelectedItem().toString();
                 fechaHasta = comboAnioHasta.getSelectedItem().toString() + "-" + comboMesHasta.getSelectedItem().toString() + "-" + comboDiaHasta.getSelectedItem().toString();
                 desde = ConversorStringDate.formatearFecha(fechaDesde);
                 hasta = ConversorStringDate.formatearFecha(fechaHasta);
-                expertoCrearExcel.crearExcelCheques(imputaciones, fechaDesde, fechaHasta);
+                expertoCrearExcel.crearExcelCheques(consulta.getImputacionesCheque(), fechaDesde, fechaHasta);
                 MostrarMensaje.mostrarMensaje("Archivo creado con exito", new ArrayList<JFrame>());
             } catch (IOException ex) {
                 MostrarMensaje.mostrarMensaje("Hubo un error al crear archivo", new ArrayList<JFrame>());
@@ -327,7 +321,6 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox comboAnioDesde;
     private javax.swing.JComboBox comboAnioHasta;
-    private javax.swing.JComboBox comboBase;
     private javax.swing.JComboBox comboDiaDesde;
     private javax.swing.JComboBox comboDiaHasta;
     private javax.swing.JComboBox comboMesDesde;
@@ -335,7 +328,8 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
     private javax.swing.JComboBox comboVendedores;
     private javax.swing.JButton consultarCheques;
     private javax.swing.JButton excel;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -500,14 +494,22 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
         comboDiaHasta.setModel(defaultComboBoxModel);
     }
 
-    private void mostrarBasesDatos() {
+    /*private void mostrarBasesDatos() {
         DefaultComboBoxModel defaultComboBoxModel = InicializarCombo.inicializarCombo(new DefaultComboBoxModel(), "Seleccione Empresa.");
         for (String base : expertoImputacion.buscarBasesDatos()) {
             defaultComboBoxModel.addElement(base);
         }
         comboBase.setModel(defaultComboBoxModel);
-    }
+    }*/
 
+    private void mostrarVendedores(){
+        DefaultComboBoxModel defaultComboBoxModel = InicializarCombo.inicializarCombo(new DefaultComboBoxModel(), "TODOS");
+        vendedores = expertoImputacion.obtenerVendedores();
+        for (DtoVendedor vendedor : vendedores) {
+            defaultComboBoxModel.addElement(vendedor.getNombreVendedor());
+        }
+        comboVendedores.setModel(defaultComboBoxModel);
+    }
     private void cargarVendedores(String empresa) {
         DefaultComboBoxModel defaultComboBoxModel = InicializarCombo.inicializarCombo(new DefaultComboBoxModel(), "TODOS");
         vendedores = expertoImputacion.obtenerVendedores(empresa);
@@ -518,17 +520,18 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
     }
 
     private void cargarImputacionesVendedor(String codVendedor, String fechaDesde, String fechaHasta) {
-        imputaciones = expertoImputacion.obtenerImputacionesChequeVendedor(codVendedor, fechaDesde, fechaHasta);
-        cargarTabla(imputaciones);
+        consulta = expertoImputacion.obtenerImputacionesChequeVendedor(codVendedor, fechaDesde, fechaHasta);
+        cargarTabla(consulta);
     }
 
     private void cargarImputaciones(String fechaDesde, String fechaHasta) {
-        imputaciones = expertoImputacion.obtenerImputacionesCheque(fechaDesde, fechaHasta);
-        cargarTabla(imputaciones);
+        consulta = expertoImputacion.obtenerImputacionesCheque(fechaDesde, fechaHasta);
+        cargarTabla(consulta);
     }
 
-    private void cargarTabla(List<DtoImputacionCheque> imputacions) {
+    private void cargarTabla(DtoResultadoConsulta resultado) {
         DefaultTableModel defaultTableModel = new DefaultTableModel();
+        defaultTableModel.addColumn("Empresa");
         defaultTableModel.addColumn("Cliente");
         defaultTableModel.addColumn("Vendedor");
         defaultTableModel.addColumn("Recibo N°");
@@ -542,25 +545,31 @@ public class PantallaImputacionesCheques extends javax.swing.JFrame {
         defaultTableModel.addColumn("Fecha Emis Chq");
         defaultTableModel.addColumn("Fecha Cob Chq");
         defaultTableModel.addColumn("Dif Fac Rec");
+        defaultTableModel.addColumn("Pond Dif Rec");
         defaultTableModel.addColumn("Dif Fac Chq");
-        for (DtoImputacionCheque imputacion : imputacions) {
-            Object[] fila = new Object[14];
-            fila[0] = imputacion.getRazonSocial();
-            fila[1] = imputacion.getNombreVendedor();
-            fila[2] = imputacion.getNroRecibo();
-            fila[3] = imputacion.getFechaRecibo();
-            fila[4] = imputacion.getImporteRecibo();
-            fila[5] = imputacion.getNroFactura();
-            fila[6] = imputacion.getFechaEmisionFactura();
-            fila[7] = imputacion.getImporteFactura();
-            fila[8] = imputacion.getNroCheque();
-            fila[9] = imputacion.getImporteCheque();
-            fila[10] = imputacion.getFechaEmisCheque();
-            fila[11] = imputacion.getFechaCobroCheque();
-            fila[12] = imputacion.getDiferenciaFacRec();
-            fila[13] = imputacion.getDiferenciaFacChq();
+        defaultTableModel.addColumn("Pond Dif Chq");
+        for (DtoImputacionCheque imputacion : resultado.getImputacionesCheque()) {
+            Object[] fila = new Object[17];
+            fila[0] = imputacion.getEmpresa();
+            fila[1] = imputacion.getRazonSocial();
+            fila[2] = imputacion.getNombreVendedor();
+            fila[3] = imputacion.getNroRecibo();
+            fila[4] = imputacion.getFechaRecibo();
+            fila[5] = imputacion.getImporteRecibo();
+            fila[6] = imputacion.getNroFactura();
+            fila[7] = imputacion.getFechaEmisionFactura();
+            fila[8] = imputacion.getImporteFactura();
+            fila[9] = imputacion.getNroCheque();
+            fila[10] = imputacion.getImporteCheque();
+            fila[11] = imputacion.getFechaEmisCheque();
+            fila[12] = imputacion.getFechaCobroCheque();
+            fila[13] = imputacion.getDiferenciaFacRec();
+            fila[14] = Redondear.redondear(Double.valueOf(imputacion.getPonderacionDifFacRec()), 2);
+            fila[15] = imputacion.getDiferenciaFacChq();
+            fila[16] = imputacion.getPonderacionDifFacChq() != null ? Redondear.redondear(Double.valueOf(imputacion.getPonderacionDifFacChq()), 2) : "";
             defaultTableModel.addRow(fila);
         }
+        jLabel11.setText(String.valueOf(resultado.getTotal()));
         tablaImputaciones.setModel(defaultTableModel);
     }
 

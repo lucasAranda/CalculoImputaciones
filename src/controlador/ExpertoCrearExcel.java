@@ -42,10 +42,10 @@ public class ExpertoCrearExcel {
     };
     
     private static final String[] titlesCheques = {
-            "Cod Cliente", "Razon Social", "Cod Vendedor", "Vendedor", "Nro de Recibo",
+            "Empresa", "Cod Cliente", "Razon Social", "Cod Vendedor", "Vendedor", "Nro de Recibo",
             "Fecha Emision", "Importe", "Nro de Factura", "Fecha Emision", "Fecha Vto",
             "Importe", "Importe Cancelado", "Nro de Cheque", "Importe", "Fecha Emision",
-            "Fecha Cobro", "Diferencia FAC REC", "Diferencia FAC CHQ"
+            "Fecha Cobro", "Diferencia FAC REC", "Ponderacion Dif FAC REC", "Diferencia FAC CHQ", "Ponderacion Dif FAC CHQ"
     };
 
     public void crearExcel(List<DtoImputacionMovimiento> imputaciones, String fechaDesde, String fechaHasta) throws FileNotFoundException, IOException {
@@ -209,7 +209,7 @@ public class ExpertoCrearExcel {
         Cell titleCell = titleRow.createCell(0);
         titleCell.setCellValue("Consulta Imputaciones");
         titleCell.setCellStyle(styles.get("title"));
-        sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$R$1"));
+        sheet.addMergedRegion(CellRangeAddress.valueOf("$A$1:$U$1"));
 
         //header row
         Row headerRow = sheet.createRow(1);
@@ -232,24 +232,27 @@ public class ExpertoCrearExcel {
         int j = 0;
         for (DtoImputacionCheque imputacion : imputaciones) {
             Row row = sheet.getRow(2 + j++);
-            row.getCell(0).setCellValue(imputacion.getCodCliente());
-            row.getCell(1).setCellValue(imputacion.getRazonSocial());
-            row.getCell(2).setCellValue(imputacion.getCodVendedor());
-            row.getCell(3).setCellValue(imputacion.getNombreVendedor());
-            row.getCell(4).setCellValue(imputacion.getNroRecibo());
-            row.getCell(5).setCellValue(imputacion.getFechaRecibo());
-            row.getCell(6).setCellValue(imputacion.getImporteRecibo());
-            row.getCell(7).setCellValue(imputacion.getNroFactura());
-            row.getCell(8).setCellValue(imputacion.getFechaEmisionFactura());
-            row.getCell(9).setCellValue(imputacion.getFechaVtoFactura());
-            row.getCell(10).setCellValue(imputacion.getImporteFactura());
-            row.getCell(11).setCellValue(imputacion.getImporteCancelado());
-            row.getCell(12).setCellValue(imputacion.getNroCheque());
-            row.getCell(13).setCellValue(imputacion.getImporteCheque());
-            row.getCell(14).setCellValue(imputacion.getFechaEmisCheque());
-            row.getCell(15).setCellValue(imputacion.getFechaCobroCheque());
-            row.getCell(16).setCellValue(imputacion.getDiferenciaFacRec());
-            row.getCell(17).setCellValue(imputacion.getDiferenciaFacChq());
+            row.getCell(0).setCellValue(imputacion.getEmpresa());
+            row.getCell(1).setCellValue(imputacion.getCodCliente());
+            row.getCell(2).setCellValue(imputacion.getRazonSocial());            
+            row.getCell(3).setCellValue(imputacion.getCodVendedor());
+            row.getCell(4).setCellValue(imputacion.getNombreVendedor());
+            row.getCell(5).setCellValue(imputacion.getNroRecibo());
+            row.getCell(6).setCellValue(imputacion.getFechaRecibo());
+            row.getCell(7).setCellValue(imputacion.getImporteRecibo());
+            row.getCell(8).setCellValue(imputacion.getNroFactura());
+            row.getCell(9).setCellValue(imputacion.getFechaEmisionFactura());
+            row.getCell(10).setCellValue(imputacion.getFechaVtoFactura());
+            row.getCell(11).setCellValue(imputacion.getImporteFactura());
+            row.getCell(12).setCellValue(imputacion.getImporteCancelado());
+            row.getCell(13).setCellValue(imputacion.getNroCheque());
+            row.getCell(14).setCellValue(imputacion.getImporteCheque());
+            row.getCell(15).setCellValue(imputacion.getFechaEmisCheque());
+            row.getCell(16).setCellValue(imputacion.getFechaCobroCheque());
+            row.getCell(17).setCellValue(imputacion.getDiferenciaFacRec());
+            row.getCell(18).setCellValue(imputacion.getPonderacionDifFacRec());
+            row.getCell(19).setCellValue(imputacion.getDiferenciaFacChq());
+            row.getCell(20).setCellValue(imputacion.getPonderacionDifFacChq());
         }
         //set sample data
         /*for (int i = 0; i < remitos.size(); i++) {
@@ -267,7 +270,7 @@ public class ExpertoCrearExcel {
 
         //finally set column widths, the width is measured in units of 1/256th of a character width
         //sheet.setColumnWidth(0, 50*256); //30 characters wide
-        for (int i = 0; i < 18; i++) {
+        for (int i = 0; i < 21; i++) {
             sheet.setColumnWidth(i, 20*256);  //6 characters wide
         }
         //sheet.setColumnWidth(10, 10*256); //10 characters wide

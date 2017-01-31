@@ -25,6 +25,8 @@ public class DtoImputacion {
     private String importeFactura;
     private String importeCancelado;
     private String diferenciaFacRec;
+    private String ponderacionDifFacRec;
+    private String empresa;
 
     public DtoImputacion() {
     }
@@ -261,5 +263,31 @@ public class DtoImputacion {
      */
     public void setCodCliente(String codCliente) {
         this.codCliente = codCliente;
+    }
+
+    /**
+     * Get the value of ponderacionDifFacRec
+     *
+     * @return the value of ponderacionDifFacRec
+     */
+    public String getPonderacionDifFacRec() {
+        return ponderacionDifFacRec;
+    }
+
+    /**
+     * Set the value of ponderacionDifFacRec
+     *
+     * @param ponderacionDifFacRec new value of ponderacionDifFacRec
+     */
+    public void setPonderacionDifFacRec(String ponderacionDifFacRec) {
+        this.ponderacionDifFacRec = ponderacionDifFacRec;
+    }
+
+    public String getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(String empresa) {
+        this.empresa = empresa;
     }
 }

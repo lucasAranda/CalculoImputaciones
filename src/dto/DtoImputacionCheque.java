@@ -16,6 +16,7 @@ public class DtoImputacionCheque extends DtoImputacion{
     private String fechaCobroCheque;
     private String importeCheque;
     private String diferenciaFacChq;
+    private String ponderacionDifFacChq;
 
     public DtoImputacionCheque() {
         super();
@@ -109,5 +110,23 @@ public class DtoImputacionCheque extends DtoImputacion{
      */
     public void setNroCheque(String nroCheque) {
         this.nroCheque = nroCheque;
+    }
+
+    /**
+     * Get the value of ponderacionDifFacChq
+     *
+     * @return the value of ponderacionDifFacChq
+     */
+    public String getPonderacionDifFacChq() {
+        return ponderacionDifFacChq;
+    }
+
+    /**
+     * Set the value of ponderacionDifFacChq
+     *
+     * @param ponderacionDifFacChq new value of ponderacionDifFacChq
+     */
+    public void setPonderacionDifFacChq(String ponderacionDifFacChq) {
+        this.ponderacionDifFacChq = ponderacionDifFacChq;
     }
 }

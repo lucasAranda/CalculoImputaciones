@@ -23,13 +23,14 @@ import java.util.logging.Logger;
 public class FachadaImputacion {
 
     private ConexionSQLServer conexion;
+    List<String> basesDatos;
 
     public FachadaImputacion() {
         conexion = ConexionSQLServer.getConexion();
     }
 
     public List<String> buscarBasesDatos() {
-        List<String> basesDatos = new ArrayList<>();
+        basesDatos = new ArrayList<>();
         try {
             ResultSet rs = conexion.obtenerBases();
             while (rs.next()) {
@@ -308,5 +309,44 @@ public class FachadaImputacion {
             Logger.getLogger(FachadaImputacion.class.getName()).log(Level.SEVERE, null, ex);
         }
         return imputaciones;
+    }
+    
+    public Double buscarTotalCanceladoVendedor(String codVendedor, String fechaDesde, String fechaHasta){
+        Double total = 0.0;
+        try {
+            ResultSet rs;
+            PreparedStatement ps = conexion.conn.prepareStatement("SELECT SUM(IMPORTE)"
+                    + "FROM GVA12 "
+                    + "WHERE T_COMP = 'REC' AND ESTADO != 'ANU' AND GVA12.COD_VENDED = ? AND FECHA_EMIS BETWEEN ? AND ? ");
+            ps.setString(1, codVendedor);
+            ps.setString(2, fechaDesde);
+            ps.setString(3, fechaHasta);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                total = rs.getDouble(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FachadaImputacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return total;
+    }
+    
+    public Double buscarTotalCancelado(String fechaDesde, String fechaHasta){
+        Double total = 0.0;
+        try {
+            ResultSet rs;
+            PreparedStatement ps = conexion.conn.prepareStatement("SELECT SUM(IMPORTE)"
+                    + "FROM GVA12 "
+                    + "WHERE T_COMP = 'REC' AND ESTADO != 'ANU' AND FECHA_EMIS BETWEEN ? AND ? ");
+            ps.setString(1, fechaDesde);
+            ps.setString(2, fechaHasta);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                total = rs.getDouble(1);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FachadaImputacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return total;
     }
 }
